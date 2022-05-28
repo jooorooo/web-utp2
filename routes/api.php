@@ -28,4 +28,5 @@ Route::group(['prefix' => 'pins', 'namespace' => 'Api',], function() {
     Route::get('/', ['uses' => 'PinController@index']);
     Route::get('user/{id}', ['uses' => 'PinController@user']);
     Route::get('view/{id}', ['uses' => 'PinController@view']);
+    Route::post('create', ['uses' => 'PinController@create']);
 });

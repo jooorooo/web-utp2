@@ -6,6 +6,7 @@ import user from './user';
 import pin from './pin';
 import login from './auth/login';
 import register from './auth/register';
+import createPin from './create-pin';
 import error404 from './error404';
 
 Vue.use(Router)
@@ -17,6 +18,7 @@ const router = new Router({
         ...home,
         ...user,
         ...pin,
+        ...createPin,
         ...register,
         ...login,
     ],

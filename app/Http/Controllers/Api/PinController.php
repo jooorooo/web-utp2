@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePinRequest;
 use App\Models\Pin;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PinController extends Controller
 {
@@ -14,7 +17,7 @@ class PinController extends Controller
                 'id', 'avatar', 'name'
             ]);
         }])
-            ->withCount('comments')->paginate();
+            ->withCount('comments')->orderBy('id', 'desc')->paginate();
 
         return response()->json($pins);
     }
@@ -26,7 +29,7 @@ class PinController extends Controller
                 'id', 'avatar', 'name'
             ]);
         }])->where('user_id', $id)
-            ->withCount('comments')->paginate();
+            ->withCount('comments')->orderBy('id', 'desc')->paginate();
 
         return response()->json($pins);
     }
@@ -48,5 +51,23 @@ class PinController extends Controller
             ->withCount('comments')->findOrFail($id);
 
         return response()->json($pins);
+    }
+
+    public function create(CreatePinRequest $request)
+    {
+
+        try {
+            $pin = Auth::user()->pins()->create($request->all());
+            $success = true;
+            $message = 'Pin created successfully';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $success = false;
+            $message = $ex->getMessage();
+        }
+
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+        ]);
     }
 }
