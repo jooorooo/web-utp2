@@ -16,6 +16,10 @@
                                 <div class="col-md-6">
                                     <input id="name" type="email" class="form-control" v-model="name" required
                                            autofocus autocomplete="off">
+
+                                    <div class="text text-danger" v-if="errors.name">
+                                        {{ errors.name[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -24,6 +28,10 @@
                                 <div class="col-md-6">
                                     <input id="email" type="email" class="form-control" v-model="email" required
                                            autofocus autocomplete="off">
+
+                                    <div class="text text-danger" v-if="errors.email">
+                                        {{ errors.email[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -32,6 +40,10 @@
                                 <div class="col-md-6">
                                     <input id="password" type="password" class="form-control" v-model="password"
                                            required autocomplete="off">
+
+                                    <div class="text text-danger" v-if="errors.password">
+                                        {{ errors.password[0] }}
+                                    </div>
                                 </div>
                             </div>
 
@@ -57,36 +69,38 @@ export default {
             name: "",
             email: "",
             password: "",
-            error: null
+            error: null,
+            errors: {
+                name: null,
+                email: null,
+                password: null,
+            },
         }
     },
     methods: {
         handleSubmit(e) {
             e.preventDefault()
-            if (this.password.length > 0) {
-                axios.get('/sanctum/csrf-cookie').then(response => {
-                    axios.post('api/register', {
-                        name: this.name,
-                        email: this.email,
-                        password: this.password
-                    })
-                        .then(response => {
-                            if (response.data.success) {
-                                this.$router.push('/login')
-                            } else {
-                                this.error = response.data.message
-                            }
-                        })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
+            axios.get('/sanctum/csrf-cookie').then(response => {
+                axios.post('api/register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password
                 })
-            }
+                    .then(response => {
+                        this.$router.push('/login')
+                    })
+                    .catch(error => {
+                        if(error.response.data.errors) {
+                            this.errors = error.response.data.errors
+                        }
+                        this.error = error.response.data.message
+                    });
+            })
         }
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if(vm.$root.user.isLoggedIn) {
+            if (vm.$root.user.isLoggedIn) {
                 return next('/');
             }
 

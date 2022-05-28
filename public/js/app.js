@@ -161,11 +161,12 @@ __webpack_require__.r(__webpack_exports__);
           image: _this.image,
           title: _this.title
         }).then(function (response) {
-          if (response.data.success) {
-            _this.$router.push('/');
-          }
+          _this.$router.push('/');
         })["catch"](function (error) {
-          _this.errors = error.response.data.errors;
+          if (error.response.data.errors) {
+            _this.errors = error.response.data.errors;
+          }
+
           _this.error = error.response.data.message;
         });
       });
@@ -269,13 +270,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       email: "",
       password: "",
-      error: null
+      error: null,
+      errors: {
+        email: null,
+        password: null
+      }
     };
   },
   methods: {
@@ -283,28 +296,25 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
+      axios.get('/sanctum/csrf-cookie').then(function (response) {
+        axios.post('api/login', {
+          email: _this.email,
+          password: _this.password
+        }).then(function (response) {
+          _this.$root.user = {
+            isLoggedIn: true,
+            user: response.data.user
+          };
 
-      if (this.password.length > 0) {
-        axios.get('/sanctum/csrf-cookie').then(function (response) {
-          axios.post('api/login', {
-            email: _this.email,
-            password: _this.password
-          }).then(function (response) {
-            if (response.data.success) {
-              _this.$root.user = {
-                isLoggedIn: true,
-                user: response.data.user
-              };
+          _this.$router.push('/');
+        })["catch"](function (error) {
+          if (error.response.data.errors) {
+            _this.errors = error.response.data.errors;
+          }
 
-              _this.$router.push('/');
-            } else {
-              _this.error = response.data.message;
-            }
-          })["catch"](function (error) {
-            console.error(error);
-          });
+          _this.error = error.response.data.message;
         });
-      }
+      });
     }
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
@@ -470,13 +480,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       name: "",
       email: "",
       password: "",
-      error: null
+      error: null,
+      errors: {
+        name: null,
+        email: null,
+        password: null
+      }
     };
   },
   methods: {
@@ -484,24 +511,21 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       e.preventDefault();
+      axios.get('/sanctum/csrf-cookie').then(function (response) {
+        axios.post('api/register', {
+          name: _this.name,
+          email: _this.email,
+          password: _this.password
+        }).then(function (response) {
+          _this.$router.push('/login');
+        })["catch"](function (error) {
+          if (error.response.data.errors) {
+            _this.errors = error.response.data.errors;
+          }
 
-      if (this.password.length > 0) {
-        axios.get('/sanctum/csrf-cookie').then(function (response) {
-          axios.post('api/register', {
-            name: _this.name,
-            email: _this.email,
-            password: _this.password
-          }).then(function (response) {
-            if (response.data.success) {
-              _this.$router.push('/login');
-            } else {
-              _this.error = response.data.message;
-            }
-          })["catch"](function (error) {
-            console.error(error);
-          });
+          _this.error = error.response.data.message;
         });
-      }
+      });
     }
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
@@ -2188,6 +2212,16 @@ var render = function () {
                       },
                     },
                   }),
+                  _vm._v(" "),
+                  _vm.errors.email
+                    ? _c("div", { staticClass: "text text-danger" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.errors.email[0]) +
+                            "\n                                "
+                        ),
+                      ])
+                    : _vm._e(),
                 ]),
               ]),
               _vm._v(" "),
@@ -2228,6 +2262,16 @@ var render = function () {
                       },
                     },
                   }),
+                  _vm._v(" "),
+                  _vm.errors.password
+                    ? _c("div", { staticClass: "text text-danger" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.errors.password[0]) +
+                            "\n                                "
+                        ),
+                      ])
+                    : _vm._e(),
                 ]),
               ]),
               _vm._v(" "),
@@ -2485,6 +2529,16 @@ var render = function () {
                       },
                     },
                   }),
+                  _vm._v(" "),
+                  _vm.errors.name
+                    ? _c("div", { staticClass: "text text-danger" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.errors.name[0]) +
+                            "\n                                "
+                        ),
+                      ])
+                    : _vm._e(),
                 ]),
               ]),
               _vm._v(" "),
@@ -2526,6 +2580,16 @@ var render = function () {
                       },
                     },
                   }),
+                  _vm._v(" "),
+                  _vm.errors.email
+                    ? _c("div", { staticClass: "text text-danger" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.errors.email[0]) +
+                            "\n                                "
+                        ),
+                      ])
+                    : _vm._e(),
                 ]),
               ]),
               _vm._v(" "),
@@ -2566,6 +2630,16 @@ var render = function () {
                       },
                     },
                   }),
+                  _vm._v(" "),
+                  _vm.errors.password
+                    ? _c("div", { staticClass: "text text-danger" }, [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(_vm.errors.password[0]) +
+                            "\n                                "
+                        ),
+                      ])
+                    : _vm._e(),
                 ]),
               ]),
               _vm._v(" "),

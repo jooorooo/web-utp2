@@ -73,12 +73,12 @@ export default {
                     title: this.title
                 })
                     .then(response => {
-                        if (response.data.success) {
-                            this.$router.push('/')
-                        }
+                        this.$router.push('/')
                     })
                     .catch(error => {
-                        this.errors = error.response.data.errors
+                        if(error.response.data.errors) {
+                            this.errors = error.response.data.errors
+                        }
                         this.error = error.response.data.message
                     });
             })

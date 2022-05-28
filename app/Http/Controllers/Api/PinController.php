@@ -68,6 +68,6 @@ class PinController extends Controller
         return response()->json([
             'success' => $success,
             'message' => $message,
-        ]);
+        ], $success ? 200 : 401);
     }
 }

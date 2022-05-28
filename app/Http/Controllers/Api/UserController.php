@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\LoginUserRequest;
 use Session;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,7 @@ class UserController
     /**
      * Register
      */
-    public function register(Request $request)
+    public function register(CreateUserRequest $request)
     {
         try {
             $user = new User();
@@ -34,13 +35,13 @@ class UserController
         return response()->json([
             'success' => $success,
             'message' => $message,
-        ]);
+        ], $success ? 200 : 401);
     }
 
     /**
      * Login
      */
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
         $credentials = [
             'email' => $request->email,
@@ -52,14 +53,14 @@ class UserController
             $message = 'User login successfully';
         } else {
             $success = false;
-            $message = 'Unauthorised';
+            $message = 'Invalid login credentials';
         }
 
         return response()->json([
             'success' => $success,
             'message' => $message,
             'user' => Auth::user(),
-        ]);
+        ], $success ? 200 : 401);
     }
 
     /**
