@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import home from './home';
 import user from './user';
 import pin from './pin';
+import login from './auth/login';
 import register from './auth/register';
 import error404 from './error404';
 
@@ -17,6 +18,7 @@ const router = new Router({
         ...user,
         ...pin,
         ...register,
+        ...login,
     ],
     // 3
     mode: 'history'

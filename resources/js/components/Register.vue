@@ -85,10 +85,13 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
-        if (window.Laravel.isLoggedin) {
-            return next('home');
-        }
-        next();
+        next(vm => {
+            if(vm.$root.user.isLoggedIn) {
+                return next('/');
+            }
+
+            next();
+        })
     }
 }
 </script>

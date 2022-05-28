@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
     data() {
         return {
@@ -61,10 +62,9 @@ export default {
                         password: this.password
                     })
                         .then(response => {
-                            console.log(response.data)
                             if (response.data.success) {
-                                window.Laravel = {
-                                    isLoggedin: true,
+                                this.$root.user = {
+                                    isLoggedIn: true,
                                     user: response.data.user
                                 }
 
@@ -81,10 +81,13 @@ export default {
         }
     },
     beforeRouteEnter(to, from, next) {
-        if (window.Laravel.isLoggedin) {
-            return next('home');
-        }
-        next();
+        next(vm => {
+            if(vm.$root.user.isLoggedIn) {
+                return next('/');
+            }
+
+            next();
+        })
     }
 }
 </script>

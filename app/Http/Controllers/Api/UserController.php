@@ -19,7 +19,8 @@ class UserController
     {
         try {
             $user = new User();
-            $user->fill($request->all() + ['password' => Hash::make($request->password), 'avatar' => app(Generator::class)->imageUrl(100,100)]);
+            $user->fill($request->all());
+            $user->fill(['password' => Hash::make($request->password), 'avatar' => app(Generator::class)->imageUrl(100,100)]);
 
             $user->save();
 

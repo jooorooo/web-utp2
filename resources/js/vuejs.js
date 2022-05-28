@@ -8,6 +8,11 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 const vuejs = new Vue({
     el: '#app',
     router,
+    data() {
+        return {
+            user: Laravel
+        }
+    },
     render: h => h(App),
 })
 

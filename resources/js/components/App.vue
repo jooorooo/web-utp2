@@ -3,7 +3,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse">
                 <!-- for logged-in user-->
-                <div class="navbar-nav" v-if="isLoggedIn">
+                <div class="navbar-nav" v-if="$root.user.isLoggedIn">
                     <router-link to="/" class="nav-item nav-link">Home</router-link>
                     <router-link to="/books" class="nav-item nav-link">Books</router-link>
                     <a class="nav-item nav-link" style="cursor: pointer;" @click="logout">Logout</a>
@@ -26,16 +26,6 @@
 <script>
 export default {
     name: "App",
-    data() {
-        return {
-            isLoggedIn: false,
-        }
-    },
-    created() {
-        if (window.Laravel.isLoggedin) {
-            this.isLoggedIn = true
-        }
-    },
     methods: {
         logout(e) {
             e.preventDefault()
@@ -43,7 +33,13 @@ export default {
                 axios.post('/api/logout')
                     .then(response => {
                         if (response.data.success) {
-                            window.location.href = "/"
+                            this.$root.user = {
+                                isLoggedIn: false
+                            }
+
+                            if(this.$route.name !== 'home') {
+                                this.$router.push('/')
+                            }
                         } else {
                             console.log(response)
                         }
