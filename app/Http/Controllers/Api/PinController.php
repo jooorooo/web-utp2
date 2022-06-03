@@ -17,7 +17,7 @@ class PinController extends Controller
                 'id', 'avatar', 'name'
             ]);
         }])
-            ->withCount('comments')->orderBy('id', 'desc')->paginate();
+            ->withCount('comments')->orderBy('id', 'desc')->simplePaginate();
 
         return response()->json($pins);
     }
@@ -29,7 +29,7 @@ class PinController extends Controller
                 'id', 'avatar', 'name'
             ]);
         }])->where('user_id', $id)
-            ->withCount('comments')->orderBy('id', 'desc')->paginate();
+            ->withCount('comments')->orderBy('id', 'desc')->simplePaginate();
 
         return response()->json($pins);
     }
